@@ -1,5 +1,6 @@
 "use server";
 
+import { put } from "@vercel/blob";
 import fs from "fs";
 import OpenAI from "openai";
 import path from "path";
@@ -8,6 +9,8 @@ import { z } from "zod";
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
+
+const USE_VERCEL_BLOB = process.env.BLOB_READ_WRITE_TOKEN;
 
 export async function generateProject(prevState: any, formData: FormData) {
   const schema = z.object({
@@ -25,7 +28,7 @@ export async function generateProject(prevState: any, formData: FormData) {
     return { url: publicUrl };
   } catch (e) {
     console.error("Error generating project:", e);
-    return { error: e };
+    return { error: true };
   }
 }
 
@@ -34,16 +37,33 @@ async function saveCSV(csvData: string) {
     const fileName = `project-plan-${Math.random()
       .toString(36)
       .substring(2, 8)}.csv`;
-    const filePath = path.join(process.cwd(), "public", "downloads", fileName);
-    const publicUrl = `/downloads/${fileName}`;
 
-    await fs.promises.writeFile(filePath, csvData);
-
-    return publicUrl;
+    if (USE_VERCEL_BLOB) {
+      return saveFileToVercelBlob(fileName, csvData);
+    } else {
+      return saveFileToDownloads(fileName, csvData);
+    }
   } catch (error) {
     console.error("Error saving CSV file:", error);
     throw new Error("Failed to save CSV file");
   }
+}
+
+async function saveFileToVercelBlob(fileName: string, data: string) {
+  const blob = await put(fileName, data, {
+    access: "public",
+  });
+
+  return blob.url;
+}
+
+async function saveFileToDownloads(fileName: string, data: string) {
+  const filePath = path.join(process.cwd(), "public", "downloads", fileName);
+  const publicUrl = `/downloads/${fileName}`;
+
+  await fs.promises.writeFile(filePath, data);
+
+  return publicUrl;
 }
 
 async function getCSVFromAI(description: string): Promise<string> {
