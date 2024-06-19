@@ -6,11 +6,13 @@ import OpenAI from "openai";
 import path from "path";
 import { z } from "zod";
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+const openai = process.env.OPENAI_API_KEY
+  ? new OpenAI({
+      apiKey: process.env.OPENAI_API_KEY,
+    })
+  : null;
 
-const USE_VERCEL_BLOB = process.env.BLOB_READ_WRITE_TOKEN;
+const USE_VERCEL_BLOB = Boolean(process.env.BLOB_READ_WRITE_TOKEN);
 
 export async function generateProject(prevState: any, formData: FormData) {
   const schema = z.object({
@@ -21,7 +23,6 @@ export async function generateProject(prevState: any, formData: FormData) {
   });
 
   try {
-    //const csvData = await getTestCSVData();
     const csvData = await getCSVFromAI(data.description);
     const publicUrl = await saveCSV(csvData);
 
@@ -66,10 +67,15 @@ async function saveFileToDownloads(fileName: string, data: string) {
   await fs.promises.writeFile(filePath, data);
 
   console.log("Saved to downloads:", publicUrl);
+
   return publicUrl;
 }
 
 async function getCSVFromAI(description: string): Promise<string> {
+  if (!openai) {
+    return getTestCSVData();
+  }
+
   try {
     const completion = await openai.chat.completions.create({
       messages: [
