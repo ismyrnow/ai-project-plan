@@ -54,6 +54,8 @@ async function saveFileToVercelBlob(fileName: string, data: string) {
     access: "public",
   });
 
+  console.log("Saved to blob:", blob.url);
+
   return blob.url;
 }
 
@@ -63,6 +65,7 @@ async function saveFileToDownloads(fileName: string, data: string) {
 
   await fs.promises.writeFile(filePath, data);
 
+  console.log("Saved to downloads:", publicUrl);
   return publicUrl;
 }
 
