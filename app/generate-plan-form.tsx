@@ -4,7 +4,7 @@ import { useFormState, useFormStatus } from "react-dom";
 import { generateProject } from "@/app/actions";
 
 const initialState = {
-  error: undefined,
+  error: false,
   url: undefined,
 };
 
@@ -26,7 +26,7 @@ export default function GeneratePlanForm() {
       <div className="flex items-center justify-between mb-4">
         <SubmitButton />
       </div>
-      {Boolean(state.error) && (
+      {state.error && (
         <p>Uh oh! Something went wrong generating your project.</p>
       )}
       {state.url && (
