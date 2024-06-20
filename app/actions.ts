@@ -72,7 +72,10 @@ async function saveFileToDownloads(fileName: string, data: string) {
 }
 
 async function getCSVFromAI(description: string): Promise<string> {
+  console.log("Generating project plan for:", description);
+
   if (!openai) {
+    console.log("Using test data for project plan");
     return getTestCSVData();
   }
 
@@ -109,7 +112,7 @@ Don't explain what you're doing, only respond with text in a CSV format.
     const result = completion.choices[0].message.content;
 
     if (!result) {
-      throw new Error("Failed to generate project plan");
+      throw new Error("ChatGPT completion result is empty");
     }
 
     return result;
