@@ -61,7 +61,7 @@ async function saveFileToVercelBlob(fileName: string, data: string) {
 }
 
 async function saveFileToDownloads(fileName: string, data: string) {
-  const filePath = path.join(process.cwd(), "public", "downloads", fileName);
+  const filePath = path.join(process.cwd(), "downloads", fileName);
   const publicUrl = `/downloads/${fileName}`;
 
   await fs.promises.writeFile(filePath, data);
