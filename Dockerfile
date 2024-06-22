@@ -45,7 +45,8 @@ ENV NODE_ENV=production
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
-COPY --from=builder /app/public ./public
+# Copy the mostly empty downloads folder for the app to use
+COPY --from=builder /app/downloads ./downloads
 
 # Set the correct permission for prerender cache
 RUN mkdir .next
