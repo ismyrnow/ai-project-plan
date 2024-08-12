@@ -85,9 +85,13 @@ async function getCSVFromAI(description: string): Promise<string> {
         {
           role: "user",
           content: `
-            I need a project plan for ${description}. I would like the plan to put into a CSV format.
+You are a project planner. I am going to give you a project description in triple quotes, and you are going to plan a project for it, following the steps below.
 
-Here is an example of an acceptable CSV format:
+Step 1. Tell me how long the project will take.
+Step 2. Give me the high level steps to complete the project.
+Step 3. For each high level step, break it down into executable sub-tasks. Each task should include the number of days to complete the task.
+Step 4. Put all of the steps together into a grouped and sub-grouped list of tasks, including start and end dates. Assume the project starts today.
+Step 5. Format the response into CSV format. Here is an example of an acceptable CSV format:
 
 "WBS #","Name / Title",Type,"Start Date","End Date"
 1,"ChatGPT Gantt Chart Template",project,2024-06-18,2024-07-02
@@ -100,9 +104,9 @@ Here is an example of an acceptable CSV format:
 1.2.2,"Task 2",task,2024-06-26,2024-06-28
 1.2.3,"Task 3",task,2024-06-29,2024-07-02
 
-A single project row is required, and all tasks must have a parent group. The number of groups and tasks can vary. The plan should include all of the steps and sub-steps necessary to complete the project.
+Don't explain what you're doing, only respond with text in the CSV format.
 
-Don't explain what you're doing, only respond with text in a CSV format.
+Project description: """${description}"""
             `,
         },
       ],
