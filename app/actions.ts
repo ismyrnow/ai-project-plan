@@ -118,17 +118,24 @@ I am going to give you a project description below in triple-quotes, and you are
       model: "gpt-4o-mini",
     });
 
-    const result = completion.choices[0].message.content;
-
-    if (!result) {
-      throw new Error("ChatGPT completion result is empty");
-    }
+    const result = cleanupGPTResponse(completion.choices[0].message.content);
 
     return result;
   } catch (error) {
     console.error("Error generating project plan:", error);
     throw new Error("Failed to generate project plan");
   }
+}
+
+function cleanupGPTResponse(response: string | null): string {
+  if (!response) {
+    throw new Error("ChatGPT completion result is empty");
+  }
+
+  // Remove surrounding ``` and leading/trailing whitespace
+  const cleaned = response.replace(/^```/, "").replace(/```$/, "").trim();
+
+  return cleaned;
 }
 
 function getTestCSVData() {
