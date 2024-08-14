@@ -115,7 +115,7 @@ I am going to give you a project description below in triple-quotes, and you are
             `,
         },
       ],
-      model: "gpt-3.5-turbo",
+      model: "gpt-4o-mini",
     });
 
     const result = completion.choices[0].message.content;
