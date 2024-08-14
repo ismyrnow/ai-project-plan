@@ -33,4 +33,6 @@ jobs:
         with:
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: ismyrnow/ai-project-plan:v${{ steps.package-version.outputs.current-version }}
+          tags:
+            - ismyrnow/ai-project-plan:v${{ steps.package-version.outputs.current-version }}
+            - ismyrnow/ai-project-plan:latest
