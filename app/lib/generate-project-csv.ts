@@ -22,33 +22,30 @@ export default async function generateProjectCSV(
         {
           role: "user",
           content: `
-I am going to give you a project description below in triple-quotes, and you are to create a realistic Work Breakdown Structure for the project. After creating the project, put it into a CSV format, which is detailed below
+I'm planning a project and need a detailed CSV file in the format required by TeamGantt for upload. Please create a Work Breakdown Structure (WBS) for this project, including all necessary phases, groups, and tasks. Each item should have appropriate start and end dates, beginning from today, and reflect a realistic timeline for the project.
 
-### CSV Columns:
-1. **WBS**: This represents the Work Breakdown Structure. It should follow a hierarchical numbering format such as "1.1.1", where the first number indicates the project, the second number indicates the group within the project, and the third number represents the specific task within that group.
-2. **Name**: The name of the project, group, or task.
-3. **Type**: The type of entry, which can be one of the following:
-   - "project" for the overall project.
-   - "group" for a group of tasks within the project.
-   - "task" for individual tasks.
-4. **Start Date**: The start date of the task in the format YYYY-MM-DD. For groups and projects, this should be the earliest start date among all tasks within them.
-5. **End Date**: The end date of the task in the format YYYY-MM-DD. For groups and projects, this should be the latest end date among all tasks within them.
+The CSV columns are as follows:
 
-### Instructions:
-1. **First Row**: The first row of the CSV should contain the column names: WBS, Name, Type, Start Date, End Date.
-2. **Hierarchy**: 
-   - Every task belongs to a group, and each group belongs to a project. 
-   - Groups can also be nested within other groups.
-   - For the sake of this request, use just one project, which should be the first content row with a "WBS" value of "1". All other groups and tasks should be nested under that.
-3. **Robustness**:
-   - The project should be robust, with all of the tasks and groups necessary to plan and execute the project.
-   - The timeline for tasks should be realistic, accounting for the time necessary to complete the task.
-4. **Output**:
-   - Do not explain what you are doing. Only reply with the text in CSV format.
+WBS #,Name / Title,Type,Start Date,End Date
 
-### Project description:
+Here is an example for reference:
 
-"""${description}"""
+WBS #,Name / Title,Type,Start Date,End Date
+1,"[Project Name]",project,YYYY-MM-DD,YYYY-MM-DD
+1.1,"[Phase/Group 1]",group,YYYY-MM-DD,YYYY-MM-DD
+1.1.1,"[Task 1]",task,YYYY-MM-DD,YYYY-MM-DD
+1.1.2,"[Task 2]",task,YYYY-MM-DD,YYYY-MM-DD
+…
+1.2,"[Phase/Group 2]",group,YYYY-MM-DD,YYYY-MM-DD
+1.2.1,"[Task 1]",task,YYYY-MM-DD,YYYY-MM-DD
+…
+
+Ensure that the project is broken down into robust, detailed groups and tasks with realistic durations.
+
+Don't explain what you're doing, only respond with text in the CSV format.
+
+Project Description:
+${description}
             `,
         },
       ],
